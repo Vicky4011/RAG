@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_rag_ai/core/services/file_picker_service.dart';
 import 'package:flutter_rag_ai/core/services/upload_service.dart';
+import 'package:flutter_rag_ai/features/chat/presentation/widgets/pdf_card.dart';
 
 FilePickerService FilePicker=FilePickerService();
 class HomePage extends StatefulWidget{
@@ -37,25 +38,13 @@ class _HomePageState extends State<HomePage> {
                     },
                   child: const Text("Upload PDF"),
               )
-              : SizedBox(
-                width: 500,
-                child: Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.picture_as_pdf),
-                      title: Text(selectedFile!.name),
-                      subtitle: Text(
-                        "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB",
-                      ),
-                  trailing: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
+              : PdfCard(
+                  file: selectedFile!,
+                  onRemove: () {
                     setState(() {
-                    selectedFile = null;
+                      selectedFile = null;
                     });
-                },
-                ),
-                    ),
-                ),
+                  },
               ),
               SizedBox(height: 20,),
               if(selectedFile != null)
