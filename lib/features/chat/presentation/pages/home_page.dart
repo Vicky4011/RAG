@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_rag_ai/core/services/file_picker_service.dart';
+import 'package:flutter_rag_ai/core/services/upload_service.dart';
 
 FilePickerService FilePicker=FilePickerService();
 class HomePage extends StatefulWidget{
@@ -18,41 +19,53 @@ class _HomePageState extends State<HomePage> {
         title: Text("RAG AI Assistant"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Ask Questions from your PDF documents"),
-            SizedBox(height: 20,),
-            selectedFile == null? ElevatedButton(
-                onPressed: () async {
-                  final file = await FilePicker.pickPdf();
-                  if (file != null) {
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Ask Questions from your PDF documents"),
+              SizedBox(height: 20,),
+              selectedFile == null? ElevatedButton(
+                  onPressed: () async {
+                    final file = await FilePicker.pickPdf();
+                    if (file != null) {
+                      setState(() {
+                        selectedFile = file;
+                      });
+                     }
+                    },
+                  child: const Text("Upload PDF"),
+              )
+              : SizedBox(
+                width: 500,
+                child: Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.picture_as_pdf),
+                      title: Text(selectedFile!.name),
+                      subtitle: Text(
+                        "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB",
+                      ),
+                  trailing: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
                     setState(() {
-                      selectedFile = file;
+                    selectedFile = null;
                     });
-                   }
-                  },
-                child: const Text("Upload PDF"),
-            )
-            : Card(
-          child: ListTile(
-          leading: const Icon(Icons.picture_as_pdf),
-          title: Text(selectedFile!.name),
-          subtitle: Text(
-            "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB",
+                },
+                ),
+                    ),
+                ),
+              ),
+              SizedBox(height: 20,),
+              if(selectedFile != null)
+                ElevatedButton(
+                onPressed: (){
+                  print("Ready for backend upload");
+                }, 
+                child: Text("Continue"))
+            ],
           ),
-          trailing: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              setState(() {
-                selectedFile = null;
-              });
-            },
-          ),
-        ),
-      )
-          ],
         ),
       ),
     );
