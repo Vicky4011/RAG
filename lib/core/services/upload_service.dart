@@ -8,7 +8,7 @@ class UploadService {
   Future<String> uploadPdf(PlatformFile file) async {
     var request = http.MultipartRequest(
       "POST",
-      Uri.parse("${ApiService.baseUrl}/upload"),
+      Uri.parse("${ApiService.baseUrl}/api/upload"),
     );
 
     if (kIsWeb) {
