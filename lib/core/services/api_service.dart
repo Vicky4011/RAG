@@ -1,12 +1,13 @@
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = "https://rag-backend-bay.vercel.app";
+  static const String baseUrl =
+      "https://rag-backend-bay.vercel.app";
 
   static Future<String> askQuestion(String question) async {
     final response = await http.get(
       Uri.parse(
-        "$baseUrl/ask?question=${Uri.encodeComponent(question)}",
+        "$baseUrl/api/ask?question=${Uri.encodeComponent(question)}",
       ),
     );
 
@@ -14,6 +15,9 @@ class ApiService {
       return response.body;
     }
 
-    throw Exception("Failed to get answer");
+    throw Exception(
+      "Server Error: ${response.statusCode}\n"
+      "${response.body}",
+    );
   }
 }
